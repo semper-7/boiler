@@ -1,0 +1,19 @@
+/*
+ if ( !ds.search(rom0)) {
+ Serial.println("Not found sensors!");
+ ds.reset_search();
+ while (true);
+ }
+
+ if (OneWire::crc8(rom0, 7) == rom0[7]) {
+ Serial.print("ROM 0 =");
+  for( byte i = 0; i < 8; i++) {
+  Serial.write(' ');
+  Serial.print(rom0[i], HEX);
+  }
+ Serial.println("");
+ } else {
+ Serial.println("ERROR ROM CRC!");
+ while (true);
+}
+*/
