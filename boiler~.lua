@@ -7,12 +7,9 @@ rom[4] = {0x28,0xA7,0xC6,0x0C,0x06,0x00,0x00,0xBA}
 rom[5] = {0x28,0x9F,0xA9,0x0E,0x06,0x00,0x00,0x8F}
 rom[6] = {0x28,0xB2,0xEE,0xA9,0x04,0x00,0x00,0xAB}
 rom[7] = {0x28,0x61,0x64,0x11,0x8D,0x8C,0xFF,0x76}
-ip = {}
-ip[1] = "192.168.1.21"
-ip[2] = "192.168.1.22"
-tnet = {}
-tnet[1] = "--.--"
-tnet[2] = "--.--"
+rom[8] = {0x28,0xF3,0x3D,0xA9,0x04,0x00,0x00,0xF9}
+ip = "192.168.1.22"
+tnet = "--.--"
 host = "yfb7905i.bget.ru"
 cfg = {25,32,42,46,50,96};
 p = {0,0,0,0,0,0,0,0}
@@ -74,7 +71,7 @@ function main()
  ow.write(3, 0xCC, 1)
  ow.write(3, 0x44, 1)
  g = tmr.create(); g:alarm(1000, tmr.ALARM_SINGLE, function()
-  for i = 1, 7 do
+  for i = 1, 8 do
    ow.reset(3)
    ow.select(3, rom[i])
    ow.write(3,0xBE,1)
@@ -96,7 +93,6 @@ function main()
    end
    var = var..v.."+"
   end
-  if tnet[1] ~= "--.--" then p[8] = tonumber(tnet[1]:sub(1,2)) end 
   if p[1] >= cfg[6] then r=8; print("OVERHEATING!!!\r\n")
   else
    FI = (p[7] >= cfg[5]) or ((p[7] >= cfg[2]) and (p[1] < cfg[5]))
@@ -106,12 +102,11 @@ function main()
    if PO then r = r + 2; gpio.write(2, gpio.HIGH) else gpio.write(2, gpio.LOW) end
    if PB then r = r + 1; gpio.write(1, gpio.HIGH) else gpio.write(1, gpio.LOW) end
   end
-  var=var..tnet[1].."+"..tnet[2].."+"..r
+  var=var..tnet.."+"..r
+  tnet = "--.--"
   print(var)
   indt()
   sendtemp()
-  tnet[1] = "--.--"
-  tnet[2] = "--.--"
  end)
 end
 
@@ -142,8 +137,7 @@ else
   s:listen(99,function(c)
    c:on("receive",function(c,l)
     print(l)
-    if l:sub(1,12)==ip[1] then tnet[1]=l:sub(14,18)
-    elseif l:sub(1,12)==ip[2] then tnet[2]=l:sub(14,18)
+    if l:sub(1,12)==ip then tnet=l:sub(14,18)
     end
     c:close()
    end)
