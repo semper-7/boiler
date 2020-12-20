@@ -1,7 +1,6 @@
 -- net18b20
 pin = 3
 ow.setup(pin)
-tn = "--.--"
 ips = "192.168.1.20"
 ip = wifi.sta.getip()
 
@@ -32,11 +31,11 @@ function ds18b20()
      tn = (t1/10)..(t1%10).."."..(t2/10)..(t2%10)
     end
    end
+   srv = net.createConnection(net.TCP, 0)
+   srv:on("connection", function(s, _) s:send(ip.." "..tn) end)
+   srv:connect(99,ips)
   end
  end)
- srv = net.createConnection(net.TCP, 0)
- srv:on("connection", function(s, _) s:send(ip.." "..tn) end)
- srv:connect(99,ips)
 end
 
 ta = tmr.create(); ta:alarm(30000, tmr.ALARM_AUTO, ds18b20)
