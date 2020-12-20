@@ -11,6 +11,8 @@ ip = {}
 ip[1] = "192.168.1.21"
 ip[2] = "192.168.1.22"
 tnet = {}
+tnet[1] = "--.--"
+tnet[2] = "--.--"
 host = "yfb7905i.bget.ru"
 cfg = {25,32,42,46,50,96};
 p = {0,0,0,0,0,0,0,0}
@@ -39,13 +41,6 @@ srv:connect(80,host)
  e = tmr.create(); e:alarm(4000, tmr.ALARM_SINGLE, function()
  if not inet then print(ind) end
  end)
-end
-
-function gettemp(q)
-tnet[q] = "--.--"
-srv = net.createConnection(net.TCP, 0)
-srv:on("receive", function(sck, c) tnet[q]=c:sub(-6,-2) end)
-srv:connect(99,ip[q])
 end
 
 function indt()
@@ -77,12 +72,10 @@ end
 
 function main()
 var = ""; r = 0
-gettemp(1)
-gettemp(2)
 ow.reset(3)
 ow.write(3, 0xCC, 1)
 ow.write(3, 0x44, 1)
- g = tmr.create(); g:alarm(4000, tmr.ALARM_SINGLE, function()
+ g = tmr.create(); g:alarm(1000, tmr.ALARM_SINGLE, function()
   for i = 1, 7 do
   ow.reset(3)
   ow.select(3, rom[i])
@@ -117,6 +110,8 @@ ow.write(3, 0x44, 1)
  print(var)
  indt()
  sendtemp()
+ tnet[1] = "--.--"
+ tnet[2] = "--.--"
  end)
 end
 
@@ -135,11 +130,21 @@ ow.setup(3)
 gpio.mode(1, gpio.OUTPUT)
 gpio.mode(2, gpio.OUTPUT)
 gpio.mode(6, gpio.INPUT, gpio.PULLUP)
- if gpio.read(6) == 0 then
+if gpio.read(6) == 0 then
  print("^~~123456789")
  t = tmr.create(); t:alarm(2000, tmr.ALARM_AUTO, test)
- else
+else
  t = tmr.create(); t:alarm(30000, tmr.ALARM_AUTO, main)
  k = tmr.create(); k:alarm(20, tmr.ALARM_AUTO, keyfunc)
+ s=net.createServer(net.TCP, 0)
+  s:listen(99,function(c)
+   c:on("receive",function(c,l)
+    print(l)
+    if l:sub(1,12)==ip[1] then tnet[1]=l:sub(14,18)
+    elseif l:sub(1,12)==ip[2] then tnet[2]=l:sub(14,18)
+    end
+    c:close()
+   end)
+  end)
  main()
- end
+end

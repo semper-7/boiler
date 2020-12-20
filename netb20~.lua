@@ -2,6 +2,8 @@
 pin = 3
 ow.setup(pin)
 tn = "--.--"
+ips = "192.168.1.20"
+ip = wifi.sta.getip()
 
 function ds18b20()
  ow.reset(pin)
@@ -32,10 +34,11 @@ function ds18b20()
    end
   end
  end)
+ srv = net.createConnection(net.TCP, 0)
+ srv:on("connection", function(s, _) s:send(ip.." "..tn) end)
+ srv:connect(99,ips)
 end
 
 ta = tmr.create(); ta:alarm(30000, tmr.ALARM_AUTO, ds18b20)
 ds18b20()
-s=net.createServer(net.TCP, 10)
-s:listen(99,function(c) c:send("Temperature NodeMCU is: "..tn.."\n"); c:close() end)
-print(("Temperature server started (%d mem free, %s)"):format(node.heap(), wifi.sta.getip()))
+print(("Temperature client started (%d mem free, %s)"):format(node.heap(), ip))
