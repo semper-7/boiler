@@ -1,6 +1,6 @@
 <?
 date_default_timezone_set('Asia/Novosibirsk');
-if (strlen($_GET["var"]) == 55) {
+if (strlen($_GET["var"]) == 61) {
  $var = preg_replace('/\+/',' ',$_GET["var"]);
  $r1 = (int) substr($var,-1);
  $m1 = (int) substr(date('i'),-1);

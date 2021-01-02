@@ -7,7 +7,7 @@ $s = explode(" ", $lines[0]);
 $date = date('Y.m.d').' '.$s[0];
 $p = ['black','red','yellow','orange'];
 $cfg = file('log.cfg');
- for ($i = 1; $i < 9; $i++) {
+ for ($i = 1; $i < 10; $i++) {
   if (s[$i] < 64) {
   $c[$i] = 'rgb('.($s[$i] << 2).',32,255)';
   } else {
@@ -17,7 +17,7 @@ $cfg = file('log.cfg');
  }
 if (substr($s[9],0,1) == '0') $s[9] = substr($s[9],1,4);
 $f = '#888';
-if (((0 + $s[10]) & 4) > 3) $f = '#f60';
+if (((0 + $s[11]) & 4) > 3) $f = '#f60';
 ?>
 <meta HTTP-EQUIV="Refresh" CONTENT="15">
 <style type="text/css">
@@ -52,7 +52,7 @@ if (((0 + $s[10]) & 4) > 3) $f = '#f60';
  border-top-color: #072;
  border-bottom-color: #072;
  border-right-color: #072;
- border-left-color: <?echo $p[$s[10]&3]?>; }
+ border-left-color: <?echo $p[$s[11]&3]?>; }
 </style> 
 </head>
 <body style="color:red;font-weight:bold;font-family:sans-serif;font-size:16px;">
@@ -63,7 +63,7 @@ if (((0 + $s[10]) & 4) > 3) $f = '#f60';
 <a href="logview.php?log=<?echo date('Ymd')?>"style="position:absolute;left:180px;top:120px;color:maroon;">View log</a>
 <a href="files.php"style="position:absolute;left:180px;top:150px;color:maroon;">Download files</a>
 <div style="position:absolute;left:2px;top:350px;width:180px;height:40px;line-height:40px;font-size:24px;text-align:center;">Home: <?echo $s[8]?>&#8451</div>
-<div style="position:absolute;background:#CEE;left:182px;top:350px;width:308px;height:40px;line-height:40px;font-size:24px;text-align:center;">Vegetable store: <?echo $s[9]?>&#8451</div>
+<div style="position:absolute;background:#CEE;left:182px;top:350px;width:308px;height:40px;line-height:40px;font-size:24px;text-align:center;">V.st.: <?echo $s[9]?>&#8451 V.rad.:<?echo $s[10]?>&#8451</div>
 <div style="position:absolute;left:350px;top:293px;"><?echo $s[6]?>&#8451</div>
 <div style="position:absolute;left:370px;top:150px;"><?echo $s[7]?>&#8451</div>
 

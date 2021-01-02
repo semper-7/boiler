@@ -1,4 +1,5 @@
 -- boiler
+ds = 3
 rom = {}
 rom[1] = {0x28,0x13,0x39,0x0E,0x06,0x00,0x00,0xAF}
 rom[2] = {0x28,0x8A,0xB8,0x0C,0x06,0x00,0x00,0x89}
@@ -8,10 +9,9 @@ rom[5] = {0x28,0x9F,0xA9,0x0E,0x06,0x00,0x00,0x8F}
 rom[6] = {0x28,0xB2,0xEE,0xA9,0x04,0x00,0x00,0xAB}
 rom[7] = {0x28,0x61,0x64,0x11,0x8D,0x8C,0xFF,0x76}
 rom[8] = {0x28,0xF3,0x3D,0xA9,0x04,0x00,0x00,0xF9}
-id = "286164118D9ED7EA"
-tnet = "--.--"
+tnet = "--.--+--.--+"
 host = "yfb7905i.bget.ru"
-cfg = {25 32 42 45 48 96};
+cfg = {25,32,42,45,48,96}
 p = {0,0,0,0,0,0,0,0}
 key,tx = 0,0
 
@@ -67,15 +67,15 @@ end
 
 function main()
  var = ""; r = 0
- ow.reset(3)
- ow.write(3, 0xCC, 1)
- ow.write(3, 0x44, 1)
+ ow.reset(ds)
+ ow.write(ds, 0xCC, 1)
+ ow.write(ds, 0x44, 1)
  g = tmr.create(); g:alarm(1000, tmr.ALARM_SINGLE, function()
-  for i = 1, 8 do
-   ow.reset(3)
-   ow.select(3, rom[i])
-   ow.write(3,0xBE,1)
-   data = ow.read_bytes(3, 9)
+  for i = 1, #rom do
+   ow.reset(ds)
+   ow.select(ds, rom[i])
+   ow.write(ds,0xBE,1)
+   data = ow.read_bytes(ds, 9)
    v = "--.--"
    if ow.crc8(data:sub(1,8)) == data:byte(9) then
     x = data:byte(1) + data:byte(2) * 256
@@ -102,8 +102,8 @@ function main()
    if PO then r = r + 2; gpio.write(2, gpio.HIGH) else gpio.write(2, gpio.LOW) end
    if PB then r = r + 1; gpio.write(1, gpio.HIGH) else gpio.write(1, gpio.LOW) end
   end
-  var=var..tnet.."+"..r
-  tnet = "--.--"
+  var=var..tnet..r
+  tnet = "--.--+--.--+"
   print(var)
   indt()
   sendtemp()
@@ -123,7 +123,7 @@ function test()
 end
 
 print("\r\nBoiler-auto started")
-ow.setup(3)
+ow.setup(ds)
 gpio.mode(1, gpio.OUTPUT)
 gpio.mode(2, gpio.OUTPUT)
 gpio.mode(6, gpio.INPUT, gpio.PULLUP)
@@ -136,9 +136,7 @@ else
  s=net.createServer(net.TCP, 0)
   s:listen(99,function(c)
    c:on("receive",function(c,l)
-    print(l)
-    if l:sub(1,16)==id then tnet=l:sub(18,22)
-    end
+    tnet=l
     c:close()
    end)
   end)
