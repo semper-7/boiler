@@ -1,8 +1,7 @@
 -- net18b20
 pin = 3
-ow.setup(pin)
 ips = "192.168.1.20"
-ip = wifi.sta.getip()
+id = "286164118D9ED7EA"
 
 function ds18b20()
  ow.reset(pin)
@@ -32,12 +31,13 @@ function ds18b20()
     end
    end
    srv = net.createConnection(net.TCP, 0)
-   srv:on("connection", function(s, _) s:send(ip.." "..tn) end)
+   srv:on("connection", function(s, _) s:send(id.." "..tn) end)
    srv:connect(99,ips)
   end
  end)
 end
 
+ow.setup(pin)
 ta = tmr.create(); ta:alarm(30000, tmr.ALARM_AUTO, ds18b20)
 ds18b20()
 print(("Temperature client started (%d mem free, %s)"):format(node.heap(), ip))
