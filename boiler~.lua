@@ -58,7 +58,7 @@ function keyfunc()
  if key~=0 then key=key-1
  elseif gpio.read(6) == 0 then
   tx = tx+1
-  if tx == 9 then tx = 0 end
+  if tx>9 then tx = 0 end
   indt()
   print(ind)
   key=10
@@ -136,7 +136,7 @@ else
  s=net.createServer(net.TCP, 0)
   s:listen(99,function(c)
    c:on("receive",function(c,l)
-    tnet=l
+    if #l==12 then tnet=l end
     c:close()
    end)
   end)
