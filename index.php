@@ -5,9 +5,9 @@
 $lines = file('log.txt');
 $s = explode(" ", $lines[0]);
 $date = date('Y.m.d').' '.$s[0];
-$p = ['black','red','yellow','orange'];
+$p = ['black','yellow'];
 $cfg = file('log.cfg');
- for ($i = 1; $i < 10; $i++) {
+ for ($i = 1; $i < 11; $i++) {
   if (s[$i] < 64) {
   $c[$i] = 'rgb('.($s[$i] << 2).',32,255)';
   } else {
@@ -34,7 +34,7 @@ if (((0 + $s[11]) & 4) > 3) $f = '#f60';
 .CO_Top {
  position:absolute;
  background: <?echo $c[1]?>; }
-.Tg_Bot {
+.TG_Bot {
  position:absolute;
  background: <?echo $c[6]?>; }
 .TA_Bot {
@@ -45,14 +45,22 @@ if (((0 + $s[11]) & 4) > 3) $f = '#f60';
  top:260px;width:8px;height:40px;
  background: <?echo $c[1]?>;
  border: solid 2px black; }
-.Pump {
+.PumpO {
  position:absolute;
  width: 0; height: 0;
  border: 10px solid ;
  border-top-color: #072;
  border-bottom-color: #072;
  border-right-color: #072;
- border-left-color: <?echo $p[$s[11]&3]?>; }
+ border-left-color: <?echo $p[($s[11]&2)>>1]?>; }
+.PumpP {
+ position:absolute;
+ width: 0; height: 0;
+ border: 10px solid ;
+ border-top-color: #072;
+ border-bottom-color: #072;
+ border-right-color: <?echo $p[$s[11]&1]?>;
+ border-left-color: #072; }
 </style> 
 </head>
 <body style="color:red;font-weight:bold;font-family:sans-serif;font-size:16px;">
@@ -63,7 +71,7 @@ if (((0 + $s[11]) & 4) > 3) $f = '#f60';
 <a href="logview.php?log=<?echo date('Ymd')?>"style="position:absolute;left:180px;top:120px;color:maroon;">View log</a>
 <a href="files.php"style="position:absolute;left:180px;top:150px;color:maroon;">Download files</a>
 <div style="position:absolute;left:2px;top:350px;width:180px;height:40px;line-height:40px;font-size:24px;text-align:center;">Home: <?echo $s[8]?>&#8451</div>
-<div style="position:absolute;background:#CEE;left:182px;top:350px;width:308px;height:40px;line-height:40px;font-size:24px;text-align:center;">V.st.: <?echo $s[9]?>&#8451 V.rad.:<?echo $s[10]?>&#8451</div>
+<div style="position:absolute;background:#CEE;left:182px;top:350px;width:308px;height:40px;line-height:40px;font-size:24px;text-align:center;">V.st.: <?echo $s[9]?>&#8451, V.rad.:<?echo $s[10]?>&#8451</div>
 <div style="position:absolute;left:350px;top:293px;"><?echo $s[6]?>&#8451</div>
 <div style="position:absolute;left:370px;top:150px;"><?echo $s[7]?>&#8451</div>
 
@@ -83,7 +91,7 @@ if (((0 + $s[11]) & 4) > 3) $f = '#f60';
 <div class="border" style="left:18px;top:312px;width:380px;height:6px;"></div>
 <div class="CO_Top" style="left:18px;top:314px;width:73px;height:6px;"></div>
 <div class="CO_Top" style="left:91px;top:314px;width:207px;height:6px;"></div>
-<div class="TG_Bot" style="left:298px;top:314px;width:102px;height:6px;"></div>
+<div class="TG_Bot" style="left:264px;top:314px;width:136px;height:6px;"></div>
 <div class="border" style="left:36px;top:294px;width:12px;height:2px;"></div>
 <div class="CO_Top" style="left:38px;top:296px;width:12px;height:2px;"></div>
 <div class="border" style="left:36px;top:298px;width:2px;height:12px;"></div>
@@ -92,10 +100,11 @@ if (((0 + $s[11]) & 4) > 3) $f = '#f60';
 <div class="CO_Top" style="left:132px;top:296px;width:12px;height:2px;"></div>
 <div class="border" style="left:140px;top:298px;width:2px;height:12px;"></div>
 <div class="CO_Top" style="left:142px;top:298px;width:2px;height:16px;"></div>
-<div class="border" style="left:142px;top:210px;width:200px;height:6px;"></div>
-<div class="TA_Bot" style="left:142px;top:212px;width:202px;height:6px;"></div>
-<div class="border" style="left:336px;top:218px;width:6px;height:92px;"></div>
-<div class="TA_Bot" style="left:338px;top:218px;width:6px;height:96px;"></div>
+<div class="border" style="left:142px;top:210px;width:256px;height:6px;"></div>
+<div class="TA_Bot" style="left:140px;top:212px;width:168px;height:6px;"></div>
+<div class="CO_Top" style="left:314px;top:212px;width:86px;height:6px;"></div>
+<div class="border" style="left:306px;top:218px;width:6px;height:92px;"></div>
+<div class="TG_Bot" style="left:308px;top:212px;width:6px;height:102px;"></div>
 <div class="border" style="left:142px;top:42px;width:324px;height:6px;"></div>
 <div class="CO_Top" style="left:142px;top:44px;width:326px;height:6px;"></div>
 <div class="border" style="left:460px;top:50px;width:6px;height:150px;"></div>
@@ -122,8 +131,11 @@ if (((0 + $s[11]) & 4) > 3) $f = '#f60';
 <div class="CO" style="left:110px;"></div>
 <div class="CO" style="left:120px;"></div>
 
-<div class="border" style="left:270px;top:295px;width:40px;height:40px;border-radius:50%;background:#072;"></div>
-<div class="Pump" style="left:289px;top:307px;"></div>
+<div class="border" style="left:220px;top:295px;width:40px;height:40px;border-radius:50%;background:#072;"></div>
+<div class="PumpO" style="left:239px;top:307px;"></div>
+
+<div class="border" style="left:340px;top:193px;width:40px;height:40px;border-radius:50%;background:#072;"></div>
+<div class="PumpP" style="left:345px;top:205px;"></div>
 
 </body>
 </html>
